@@ -1,4 +1,4 @@
-import { supabaseRequest } from "../../lib/supabaseClient.js";
+import { supabaseBrowserClient, supabaseRequest } from "../../lib/supabaseClient.js";
 
 export const contactMessageStatuses = [
   { value: "new", label: "Nowe" },
@@ -16,15 +16,29 @@ export function getContactStatusLabel(status) {
 const contactMessageSelect =
   "id,created_at,updated_at,name,email,phone,subject,message,status";
 
-export function createContactMessage(message) {
-  return supabaseRequest(`/rest/v1/contact_messages?select=${contactMessageSelect}`, {
-    method: "POST",
-    headers: { Prefer: "return=representation" },
-    body: JSON.stringify({
+export async function createContactMessage(message) {
+  if (!supabaseBrowserClient) {
+    return {
+      data: null,
+      error: new Error("Brakuje konfiguracji Supabase."),
+      status: 0,
+    };
+  }
+
+  const result = await supabaseBrowserClient
+    .from("contact_messages")
+    .insert({
       ...message,
       status: "new",
-    }),
-  });
+    })
+    .select(contactMessageSelect)
+    .single();
+
+  return {
+    data: result.data,
+    error: result.error,
+    status: result.status,
+  };
 }
 
 export function getAdminContactMessages() {

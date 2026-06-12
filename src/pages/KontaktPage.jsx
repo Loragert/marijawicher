@@ -13,48 +13,70 @@ const emptyContactForm = {
 const contactDetails = [
   {
     title: "Telefon",
-    value: "+48 787 004 784",
+    value: <>+48 787 004 784</>,
     href: "tel:+48787004784",
     Icon: Phone,
   },
   {
     title: "Email",
-    value: "skkmarija@gmail.com",
+    value: <>skkmarija@gmail.com</>,
     href: "mailto:skkmarija@gmail.com",
     Icon: Mail,
   },
   {
     title: "Adres",
-    value: "Słowiańska 49, 64-100 Leszno",
+    value: <>S&#322;owia&#324;ska 49, 64-100 Leszno</>,
     Icon: MapPin,
   },
   {
     title: "Godziny kontaktu",
-    value: "Poniedziałek - Piątek\n08:00 - 17:00",
+    value: (
+      <>
+        Poniedzia&#322;ek - Pi&#261;tek
+        <br />
+        08:00 - 17:00
+      </>
+    ),
     Icon: Clock,
   },
 ];
 
 const faqItems = [
   {
-    question: "Jak umówić szycie na miarę?",
-    answer:
-      "Skontaktuj się z nami telefonicznie, mailowo lub przez formularz. Ustalimy termin konsultacji i omówimy szczegóły projektu.",
+    question: <>Jak um&#243;wi&#263; szycie na miar&#281;?</>,
+    answer: (
+      <>
+        Skontaktuj si&#281; z nami telefonicznie, mailowo lub przez formularz. Ustalimy
+        termin konsultacji i om&#243;wimy szczeg&#243;&#322;y projektu.
+      </>
+    ),
   },
   {
-    question: "Jak zamówić haft komputerowy?",
-    answer:
-      "Prześlij tekst, logo lub opis pomysłu. Przygotujemy propozycję haftu i ustalimy szczegóły realizacji.",
+    question: <>Jak zam&#243;wi&#263; haft komputerowy?</>,
+    answer: (
+      <>
+        Prze&#347;lij tekst, logo lub opis pomys&#322;u. Przygotujemy propozycj&#281; haftu i
+        ustalimy szczeg&#243;&#322;y realizacji.
+      </>
+    ),
   },
   {
-    question: "Czy kursy są dla początkujących?",
-    answer:
-      "Tak, prowadzimy zajęcia zarówno dla osób początkujących, jak i dla tych, które chcą rozwijać swoje umiejętności.",
+    question: <>Czy kursy s&#261; dla pocz&#261;tkuj&#261;cych?</>,
+    answer: (
+      <>
+        Tak, prowadzimy zaj&#281;cia zar&#243;wno dla os&#243;b pocz&#261;tkuj&#261;cych, jak i dla
+        tych, kt&#243;re chc&#261; rozwija&#263; swoje umiej&#281;tno&#347;ci.
+      </>
+    ),
   },
   {
-    question: "Czy można umówić konsultację indywidualną?",
-    answer:
-      "Tak, istnieje możliwość indywidualnego spotkania i omówienia projektu lub zakresu nauki.",
+    question: <>Czy mo&#380;na um&#243;wi&#263; konsultacj&#281; indywidualn&#261;?</>,
+    answer: (
+      <>
+        Tak, istnieje mo&#380;liwo&#347;&#263; indywidualnego spotkania i om&#243;wienia projektu
+        lub zakresu nauki.
+      </>
+    ),
   },
 ];
 
@@ -62,34 +84,16 @@ function KontaktPage() {
   const [openFaq, setOpenFaq] = useState(0);
   const [form, setForm] = useState(emptyContactForm);
   const [isSending, setIsSending] = useState(false);
-  const [statusMessage, setStatusMessage] = useState({ type: "", text: "" });
+  const [statusMessage, setStatusMessage] = useState({ type: "", text: null });
 
   function updateField(name, value) {
     setForm((currentForm) => ({ ...currentForm, [name]: value }));
   }
 
-  async function sendContactMessage(payload) {
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        return { error: null };
-      }
-    } catch {
-      // Local Vite development may not expose /api/contact. The Supabase fallback keeps the form testable.
-    }
-
-    return createContactMessage(payload);
-  }
-
   async function handleSubmit(event) {
     event.preventDefault();
     setIsSending(true);
-    setStatusMessage({ type: "", text: "" });
+    setStatusMessage({ type: "", text: null });
 
     const payload = {
       name: form.name.trim(),
@@ -99,13 +103,18 @@ function KontaktPage() {
       message: form.message.trim(),
     };
 
-    const result = await sendContactMessage(payload);
+    const result = await createContactMessage(payload);
     setIsSending(false);
 
     if (result.error) {
       setStatusMessage({
         type: "error",
-        text: "Nie udało się wysłać wiadomości. Spróbuj ponownie lub skontaktuj się telefonicznie.",
+        text: (
+          <>
+            Nie uda&#322;o si&#281; wys&#322;a&#263; wiadomo&#347;ci. Spr&#243;buj ponownie lub
+            skontaktuj si&#281; telefonicznie.
+          </>
+        ),
       });
       return;
     }
@@ -113,7 +122,12 @@ function KontaktPage() {
     setForm(emptyContactForm);
     setStatusMessage({
       type: "success",
-      text: "Wiadomość została wysłana. Skontaktujemy się z Tobą najszybciej jak to możliwe.",
+      text: (
+        <>
+          Wiadomo&#347;&#263; zosta&#322;a wys&#322;ana. Skontaktujemy si&#281; z Tob&#261;
+          najszybciej jak to mo&#380;liwe.
+        </>
+      ),
     });
   }
 
@@ -124,11 +138,11 @@ function KontaktPage() {
           <div className="max-w-4xl">
             <p className="eyebrow">KONTAKT</p>
             <h1 className="font-display text-5xl leading-[0.95] md:text-7xl lg:text-8xl">
-              Skontaktuj się z nami
+              Skontaktuj si&#281; z nami
             </h1>
             <p className="mt-8 max-w-3xl text-lg leading-8 text-stone md:text-xl md:leading-9">
-              Masz pytania dotyczące szycia na miarę, haftu komputerowego lub kursów
-              szycia? Chętnie pomożemy i odpowiemy na wszystkie pytania.
+              Masz pytania dotycz&#261;ce szycia na miar&#281;, haftu komputerowego lub
+              kurs&#243;w szycia? Ch&#281;tnie pomo&#380;emy i odpowiemy na wszystkie pytania.
             </p>
             <a className="btn btn-primary mt-10" href="mailto:skkmarija@gmail.com">
               NAPISZ DO NAS
@@ -146,7 +160,7 @@ function KontaktPage() {
                   <Icon size={24} aria-hidden="true" />
                 </span>
                 <h2 className="mt-8 font-display text-3xl leading-tight">{title}</h2>
-                <p className="mt-4 whitespace-pre-line leading-7 text-stone">{value}</p>
+                <p className="mt-4 leading-7 text-stone">{value}</p>
               </>
             );
 
@@ -177,17 +191,17 @@ function KontaktPage() {
           <div className="max-w-xl">
             <p className="eyebrow">Formularz</p>
             <h2 className="font-display text-4xl leading-tight md:text-6xl">
-              Napisz wiadomość
+              Napisz wiadomo&#347;&#263;
             </h2>
             <p className="mt-6 text-lg leading-8 text-stone">
-              Opisz swój projekt, pytanie lub termin, który Cię interesuje. Wrócimy z
-              odpowiedzią tak szybko, jak to możliwe.
+              Opisz sw&#243;j projekt, pytanie lub termin, kt&#243;ry Ci&#281; interesuje.
+              Wr&#243;cimy z odpowiedzi&#261; tak szybko, jak to mo&#380;liwe.
             </p>
           </div>
 
           <form className="contact-form" onSubmit={handleSubmit}>
             <label>
-              Imię
+              Imi&#281;
               <input
                 name="name"
                 type="text"
@@ -229,7 +243,7 @@ function KontaktPage() {
               />
             </label>
             <label className="md:col-span-2">
-              Wiadomość
+              Wiadomo&#347;&#263;
               <textarea
                 name="message"
                 rows="6"
@@ -241,7 +255,7 @@ function KontaktPage() {
             <div className="flex flex-col gap-4 md:col-span-2 md:flex-row md:items-center">
               <button className="btn btn-primary" type="submit" disabled={isSending}>
                 {isSending ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
-                {isSending ? "WYSYŁANIE..." : "WYŚLIJ WIADOMOŚĆ"}
+                {isSending ? <>WYSY&#321;ANIE...</> : <>WY&#346;LIJ WIADOMO&#346;&#262;</>}
               </button>
               {statusMessage.text && (
                 <p
@@ -261,14 +275,14 @@ function KontaktPage() {
       <section className="section reveal-on-scroll">
         <div className="section-heading">
           <p className="eyebrow">FAQ</p>
-          <h2>Najczęstsze pytania</h2>
+          <h2>Najcz&#281;stsze pytania</h2>
         </div>
         <div className="contact-faq-list">
           {faqItems.map((item, index) => {
             const isOpen = openFaq === index;
 
             return (
-              <article key={item.question} className="contact-faq-item reveal-on-scroll">
+              <article key={index} className="contact-faq-item reveal-on-scroll">
                 <button
                   type="button"
                   className="contact-faq-trigger"
@@ -295,10 +309,10 @@ function KontaktPage() {
             Porozmawiajmy o Twoim projekcie
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-stone">
-            Napisz lub zadzwoń do nas, a wspólnie stworzymy coś wyjątkowego.
+            Napisz lub zadzwo&#324; do nas, a wsp&#243;lnie stworzymy co&#347; wyj&#261;tkowego.
           </p>
           <a className="btn btn-primary mt-9" href="mailto:skkmarija@gmail.com">
-            SKONTAKTUJ SIĘ
+            SKONTAKTUJ SI&#280;
           </a>
         </div>
       </section>

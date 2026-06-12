@@ -46,6 +46,10 @@ execute function public.set_contact_messages_updated_at();
 
 alter table public.contact_messages enable row level security;
 
+grant usage on schema public to anon, authenticated;
+grant insert on public.contact_messages to anon;
+grant insert, select, update on public.contact_messages to authenticated;
+
 drop policy if exists "Anyone can create contact messages" on public.contact_messages;
 create policy "Anyone can create contact messages"
 on public.contact_messages
