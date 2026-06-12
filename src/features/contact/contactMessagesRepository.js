@@ -31,26 +31,25 @@ export async function createContactMessage(message) {
     };
   }
 
-  const result = await supabase
-    .from("contact_messages")
-    .insert([
-      {
-        name: message.name,
-        email: message.email,
-        phone: message.phone || null,
-        subject: message.subject,
-        message: message.message,
-        status: "new",
-      },
-    ])
-    .select(contactMessageSelect)
-    .single();
+  const payload = [
+    {
+      name: message.name,
+      email: message.email,
+      phone: message.phone || null,
+      subject: message.subject,
+      message: message.message,
+      status: "new",
+    },
+  ];
+
+  const result = await supabase.from("contact_messages").insert(payload);
 
   if (result.error) {
     console.error("Contact form Supabase insert error", {
       status: result.status,
       statusText: result.statusText,
       error: result.error,
+      payload,
     });
 
     return {
@@ -61,7 +60,7 @@ export async function createContactMessage(message) {
   }
 
   return {
-    data: result.data,
+    data: null,
     error: null,
     status: result.status,
   };
