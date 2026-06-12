@@ -1,0 +1,678 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #f7f1e8;
+  color: #12100d;
+  font-family: Inter, Arial, sans-serif;
+}
+
+@layer components {
+  .logo {
+    @apply max-w-[13rem] text-sm font-semibold uppercase leading-tight tracking-[0.24em] text-neutral-950 transition hover:text-rosewood sm:max-w-none;
+  }
+
+  .nav-link {
+    @apply text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-neutral-950/80 transition hover:text-rosewood;
+  }
+
+  .nav-link-active {
+    @apply text-rosewood;
+  }
+
+  .icon-button {
+    @apply grid h-10 w-10 place-items-center rounded-full text-neutral-950 transition hover:bg-linen focus:outline-none focus:ring-2 focus:ring-neutral-950/30;
+  }
+
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-6 text-center text-sm font-semibold uppercase tracking-[0.16em] transition duration-300;
+  }
+
+  .btn-primary {
+    @apply bg-neutral-950 text-milk shadow-soft hover:-translate-y-0.5 hover:bg-rosewood;
+  }
+
+  .btn-secondary {
+    @apply border border-neutral-950/20 bg-milk text-neutral-950 hover:-translate-y-0.5 hover:border-neutral-950 hover:bg-linen;
+  }
+
+  .hero-image-panel {
+    @apply relative h-[54vh] min-h-[360px] overflow-hidden rounded-[1.75rem] shadow-soft sm:h-[64vh] lg:h-[76vh];
+  }
+
+  .hero-note {
+    @apply absolute bottom-5 left-5 bg-milk px-6 py-5 shadow-soft backdrop-blur md:bottom-10 md:left-0;
+  }
+
+  .section {
+    @apply mx-auto max-w-7xl px-5 py-20 sm:px-8 md:py-28 lg:px-10;
+  }
+
+  .section-heading {
+    @apply mb-12 max-w-3xl;
+  }
+
+  .section-heading h2 {
+    @apply font-display text-4xl leading-tight md:text-6xl;
+  }
+
+  .section-heading p:not(.eyebrow) {
+    @apply mt-6 text-lg leading-8 text-stone;
+  }
+
+  .eyebrow {
+    @apply mb-5 flex text-xs font-semibold uppercase tracking-[0.3em] text-rosewood;
+  }
+
+  .collection-card {
+    @apply border border-neutral-950/10 bg-milk p-7 transition duration-500 hover:-translate-y-2 hover:border-rosewood/30 hover:shadow-soft;
+  }
+
+  .fashion-collection-card {
+    @apply relative isolate overflow-hidden bg-milk shadow-soft transition duration-700 hover:-translate-y-2;
+    background:
+      radial-gradient(circle at 50% 18%, rgba(255, 252, 246, 0.96) 0%, rgba(255, 250, 242, 0.58) 30%, transparent 58%),
+      linear-gradient(180deg, #fffaf2 0%, #f8f0e6 52%, #e6d8c4 100%);
+  }
+
+  .fashion-collection-visual {
+    @apply absolute inset-0;
+  }
+
+  .collection-model {
+    @apply absolute left-1/2 h-auto max-w-[92%] -translate-x-1/2 object-contain object-bottom transition duration-700 ease-out;
+    transform-origin: center bottom;
+  }
+
+  .collection-model-natural {
+    @apply bottom-[18%] max-h-[76%];
+  }
+
+  .collection-model-women {
+    @apply bottom-[15%] max-h-[80%];
+  }
+
+  .collection-model-kids {
+    @apply bottom-[14%] max-h-[73%];
+  }
+
+  .collection-model-shopper {
+    @apply bottom-[16%] max-h-[72%] max-w-[84%];
+  }
+
+  .fashion-collection-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 45%;
+    background: linear-gradient(to top,
+        rgba(26, 26, 26, 0.88),
+        rgba(26, 26, 26, 0.42),
+        transparent);
+    }
+
+  .fashion-collection-card:hover .collection-model {
+    @apply scale-[1.04];
+  }
+
+  .fashion-collection-card:hover .fashion-collection-overlay {
+    background: linear-gradient(to top,
+        rgba(26, 26, 26, 1),
+        rgba(26, 26, 26, 0.45),
+        transparent);
+  }
+  .collection-button {
+    @apply pointer-events-none mt-7 inline-flex w-fit translate-y-4 rounded-full border border-milk px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-milk opacity-0 transition duration-500 hover:bg-milk hover:text-neutral-950;
+  }
+
+  .fashion-collection-card:hover .collection-button {
+    @apply pointer-events-auto translate-y-0 bg-milk text-neutral-950 opacity-100;
+  }
+
+  .service-card {
+    @apply border border-neutral-950/10 bg-porcelain p-7 transition duration-500 hover:-translate-y-1 hover:bg-milk hover:shadow-soft;
+  }
+
+  .service-card h3 {
+    @apply mt-7 font-display text-3xl;
+  }
+
+  .service-card p {
+    @apply mt-4 leading-7 text-stone;
+  }
+
+  .split-band {
+    @apply grid items-center gap-10 border-y border-neutral-950/10 py-16 lg:grid-cols-2;
+  }
+
+  .course-panel {
+    @apply grid gap-10 bg-neutral-950 p-8 text-milk md:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-end;
+  }
+
+  .course-tile {
+    @apply min-h-36 border border-milk/15 bg-milk/5 p-6 font-display text-2xl text-milk transition hover:bg-milk hover:text-neutral-950;
+  }
+
+  .contact-band {
+    @apply flex flex-col gap-8 bg-linen p-8 md:flex-row md:items-center md:justify-between md:p-12;
+  }
+
+  .tailoring-panel {
+    @apply grid items-center gap-10 overflow-hidden rounded-[1.5rem] border border-neutral-950/10 bg-milk p-7 shadow-soft md:p-10 lg:grid-cols-[0.92fr_1.08fr] lg:p-12;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(255, 250, 242, 0.95) 0%, transparent 34%),
+      linear-gradient(135deg, #fffaf2 0%, #f7f1e8 54%, #eadcc9 100%);
+  }
+
+  .tailoring-image-frame {
+    @apply h-[24rem] overflow-hidden rounded-[1.25rem] shadow-soft md:h-[32rem] lg:h-[36rem];
+  }
+
+  .tailoring-step-card {
+    @apply flex min-h-[24rem] flex-col rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:bg-porcelain md:p-8;
+  }
+
+  .tailoring-step-icon {
+    @apply grid h-14 w-14 shrink-0 place-items-center rounded-full border border-neutral-950/10 bg-porcelain text-neutral-950 shadow-soft transition duration-500;
+  }
+
+  .tailoring-step-card:hover .tailoring-step-icon {
+    @apply bg-neutral-950 text-milk;
+  }
+
+  .about-story {
+    @apply relative overflow-hidden border-y border-neutral-950/10 py-16 md:py-24;
+  }
+
+  .about-story::before {
+    content: "";
+    @apply absolute inset-x-0 top-0 h-64 opacity-80;
+    background: radial-gradient(circle at 18% 0%, rgba(255, 250, 242, 0.95), transparent 58%);
+  }
+
+  .about-story-image {
+    @apply pointer-events-none absolute right-0 top-8 hidden h-[28rem] w-[22rem] opacity-90 md:block lg:right-8 lg:top-10 lg:h-[36rem] lg:w-[28rem] xl:right-16;
+  }
+
+  .about-page-logo-panel {
+    @apply flex min-h-[22rem] items-center justify-center rounded-[1.5rem] border border-neutral-950/10 bg-milk p-8 shadow-soft md:min-h-[28rem];
+    background:
+      radial-gradient(circle at 50% 30%, rgba(255, 250, 242, 0.98), transparent 46%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .about-stats {
+    @apply mt-14 grid gap-6 border-y border-neutral-950/10 py-8 sm:grid-cols-3 md:mt-20;
+  }
+
+  .about-stat-item {
+    @apply border-neutral-950/10 py-3 sm:border-r sm:pr-6;
+  }
+
+  .about-stat-item:last-child {
+    @apply border-r-0;
+  }
+
+  .about-value-card {
+    @apply min-h-60 border border-neutral-950/10 bg-milk p-6 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain;
+  }
+
+  .about-value-card:hover {
+    box-shadow: 0 30px 90px rgba(18, 16, 13, 0.13);
+  }
+
+  .haft-shell {
+    @apply rounded-[1.5rem] border border-neutral-950/10 bg-milk px-5 py-14 shadow-soft sm:px-8 md:py-20 lg:px-10;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255, 250, 242, 0.96), transparent 42%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 58%, #eadcc9 100%);
+  }
+
+  .haft-card {
+    @apply min-h-72 rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain md:p-8;
+  }
+
+  .haft-card:hover {
+    box-shadow: 0 30px 90px rgba(18, 16, 13, 0.12);
+  }
+
+  .haft-icon {
+    @apply grid h-20 w-20 place-items-center rounded-full border border-neutral-950/10 bg-porcelain text-neutral-950 shadow-soft transition duration-500;
+  }
+
+  .haft-card:hover .haft-icon {
+    @apply bg-neutral-950 text-milk;
+  }
+
+  .haft-cta {
+    @apply mx-auto mt-14 max-w-3xl rounded-[1.5rem] border border-neutral-950/10 bg-milk px-6 py-10 text-center shadow-soft transition duration-700 ease-out md:mt-16 md:px-10 md:py-12;
+  }
+
+  .courses-panel {
+    @apply grid items-center gap-10 overflow-hidden rounded-[1.5rem] border border-neutral-950/10 bg-milk p-7 shadow-soft md:p-10 lg:grid-cols-[0.95fr_1.05fr] lg:p-12;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(255, 250, 242, 0.96) 0%, transparent 34%),
+      linear-gradient(135deg, #fffaf2 0%, #f7f1e8 56%, #eadcc9 100%);
+  }
+
+  .courses-image-frame {
+    @apply h-[24rem] overflow-hidden rounded-[1.25rem] shadow-soft md:h-[32rem] lg:h-[36rem];
+  }
+
+  .courses-card {
+    @apply flex min-h-[24rem] flex-col rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-rosewood/30 hover:bg-porcelain md:p-8;
+  }
+
+  .courses-card:hover {
+    box-shadow: 0 30px 90px rgba(18, 16, 13, 0.13);
+  }
+
+  .courses-icon {
+    @apply grid h-14 w-14 shrink-0 place-items-center rounded-full border border-neutral-950/10 bg-porcelain text-neutral-950 shadow-soft transition duration-500;
+  }
+
+  .courses-card:hover .courses-icon {
+    @apply bg-neutral-950 text-milk;
+  }
+
+  .courses-cta {
+    @apply mx-auto mt-14 max-w-4xl rounded-[1.5rem] border border-neutral-950/10 bg-milk px-6 py-10 text-center shadow-soft transition duration-700 ease-out md:mt-16 md:px-10 md:py-12;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255, 250, 242, 0.98), transparent 48%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .tailoring-page-hero {
+    @apply overflow-hidden bg-porcelain pt-20;
+  }
+
+  .tailoring-page-hero-image {
+    @apply h-[54vh] min-h-[360px] overflow-hidden rounded-[1.75rem] shadow-soft md:h-[66vh] lg:h-[74vh];
+  }
+
+  .tailoring-process-grid {
+    @apply grid gap-4 md:grid-cols-2 lg:grid-cols-5;
+  }
+
+  .tailoring-process-card {
+    @apply min-h-72 rounded-[1.25rem] border border-neutral-950/10 bg-milk p-6 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-rosewood/30 hover:bg-porcelain;
+  }
+
+  .tailoring-process-card:hover,
+  .tailoring-product-card:hover,
+  .tailoring-reason-card:hover,
+  .tailoring-benefit-card:hover {
+    box-shadow: 0 30px 90px rgba(18, 16, 13, 0.13);
+  }
+
+  .tailoring-page-icon {
+    @apply grid h-12 w-12 shrink-0 place-items-center rounded-full border border-neutral-950/10 bg-porcelain text-neutral-950 shadow-soft transition duration-500;
+  }
+
+  .tailoring-process-card:hover .tailoring-page-icon,
+  .tailoring-reason-card:hover .tailoring-page-icon {
+    @apply bg-neutral-950 text-milk;
+  }
+
+  .tailoring-product-card {
+    @apply overflow-hidden rounded-[1.25rem] border border-neutral-950/10 bg-milk shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30;
+  }
+
+  .tailoring-product-image {
+    @apply h-72 overflow-hidden;
+  }
+
+  .tailoring-product-image img {
+    @apply transition duration-700 ease-out;
+  }
+
+  .tailoring-product-card:hover .tailoring-product-image img {
+    @apply scale-105;
+  }
+
+  .tailoring-reason-card {
+    @apply min-h-60 rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain;
+  }
+
+  .tailoring-benefit-card {
+    @apply min-h-72 rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain;
+    background:
+      radial-gradient(circle at 18% 0%, rgba(255, 250, 242, 0.92), transparent 42%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .tailoring-final-cta {
+    @apply grid items-center gap-10 overflow-hidden rounded-[1.5rem] border border-neutral-950/10 bg-milk p-7 shadow-soft md:p-10 lg:grid-cols-[0.95fr_1.05fr] lg:p-12;
+    background:
+      radial-gradient(circle at 16% 12%, rgba(255, 250, 242, 0.98) 0%, transparent 36%),
+      linear-gradient(135deg, #fffaf2 0%, #f7f1e8 58%, #eadcc9 100%);
+  }
+
+  .tailoring-final-image {
+    @apply h-[24rem] overflow-hidden rounded-[1.25rem] shadow-soft md:h-[32rem];
+  }
+
+  .haft-page-hero {
+    @apply overflow-hidden bg-porcelain pt-20;
+  }
+
+  .haft-page-hero-image {
+    @apply h-[54vh] min-h-[360px] overflow-hidden rounded-[1.75rem] shadow-soft md:h-[66vh] lg:h-[74vh];
+  }
+
+  .haft-page-card {
+    @apply min-h-72 rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain md:p-8;
+    background:
+      radial-gradient(circle at 18% 0%, rgba(255, 250, 242, 0.94), transparent 42%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .haft-page-card:hover,
+  .haft-order-card:hover,
+  .haft-audience-card:hover,
+  .haft-benefit-card:hover {
+    box-shadow: 0 30px 90px rgba(18, 16, 13, 0.13);
+  }
+
+  .haft-page-icon {
+    @apply grid h-14 w-14 shrink-0 place-items-center rounded-full border border-neutral-950/10 bg-porcelain text-neutral-950 shadow-soft transition duration-500;
+  }
+
+  .haft-page-card:hover .haft-page-icon,
+  .haft-order-card:hover .haft-page-icon,
+  .haft-benefit-card:hover .haft-page-icon {
+    @apply bg-neutral-950 text-milk;
+  }
+
+  .haft-order-card {
+    @apply min-h-72 rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain;
+  }
+
+  .haft-audience-card {
+    @apply min-h-72 rounded-[1.5rem] border border-neutral-950/10 bg-milk p-8 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain md:p-10;
+    background:
+      radial-gradient(circle at 16% 0%, rgba(255, 250, 242, 0.98), transparent 44%),
+      linear-gradient(135deg, #fffaf2 0%, #f7f1e8 62%, #eadcc9 100%);
+  }
+
+  .haft-benefit-card {
+    @apply min-h-72 rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain;
+    background:
+      radial-gradient(circle at 18% 0%, rgba(255, 250, 242, 0.96), transparent 42%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .haft-page-cta {
+    @apply mx-auto max-w-4xl rounded-[1.5rem] border border-neutral-950/10 bg-milk px-6 py-12 text-center shadow-soft transition duration-700 ease-out md:px-10 md:py-16;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255, 250, 242, 0.98), transparent 48%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .courses-page-hero {
+    @apply overflow-hidden bg-porcelain pt-20;
+  }
+
+  .courses-page-hero-image {
+    @apply h-[54vh] min-h-[360px] overflow-hidden rounded-[1.75rem] shadow-soft md:h-[66vh] lg:h-[74vh];
+  }
+
+  .courses-page-card,
+  .courses-skill-card,
+  .courses-process-card,
+  .courses-reason-card {
+    @apply rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain md:p-8;
+    background:
+      radial-gradient(circle at 18% 0%, rgba(255, 250, 242, 0.94), transparent 42%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .courses-page-card,
+  .courses-process-card,
+  .courses-reason-card {
+    @apply min-h-72;
+  }
+
+  .courses-skill-card {
+    @apply min-h-56;
+  }
+
+  .courses-page-card:hover,
+  .courses-skill-card:hover,
+  .courses-process-card:hover,
+  .courses-reason-card:hover {
+    box-shadow: 0 30px 90px rgba(18, 16, 13, 0.13);
+  }
+
+  .courses-page-icon {
+    @apply grid h-14 w-14 shrink-0 place-items-center rounded-full border border-neutral-950/10 bg-porcelain text-neutral-950 shadow-soft transition duration-500;
+  }
+
+  .courses-page-card:hover .courses-page-icon,
+  .courses-skill-card:hover .courses-page-icon,
+  .courses-process-card:hover .courses-page-icon,
+  .courses-reason-card:hover .courses-page-icon {
+    @apply bg-neutral-950 text-milk;
+  }
+
+  .courses-page-cta {
+    @apply mx-auto max-w-4xl rounded-[1.5rem] border border-neutral-950/10 bg-milk px-6 py-12 text-center shadow-soft transition duration-700 ease-out md:px-10 md:py-16;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255, 250, 242, 0.98), transparent 48%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .contact-page-hero {
+    @apply overflow-hidden bg-porcelain pt-20;
+  }
+
+  .contact-detail-card {
+    @apply block min-h-64 rounded-[1.25rem] border border-neutral-950/10 bg-milk p-7 shadow-soft transition duration-700 ease-out hover:-translate-y-2 hover:scale-[1.01] hover:border-rosewood/30 hover:bg-porcelain;
+    background:
+      radial-gradient(circle at 18% 0%, rgba(255, 250, 242, 0.94), transparent 42%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .contact-detail-card:hover,
+  .contact-faq-item:hover {
+    box-shadow: 0 30px 90px rgba(18, 16, 13, 0.13);
+  }
+
+  .contact-page-icon {
+    @apply grid h-14 w-14 shrink-0 place-items-center rounded-full border border-neutral-950/10 bg-porcelain text-neutral-950 shadow-soft transition duration-500;
+  }
+
+  .contact-detail-card:hover .contact-page-icon {
+    @apply bg-neutral-950 text-milk;
+  }
+
+  .contact-form-shell {
+    @apply grid gap-10 rounded-[1.5rem] border border-neutral-950/10 bg-milk p-7 shadow-soft md:p-10 lg:grid-cols-[0.8fr_1.2fr] lg:p-12;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(255, 250, 242, 0.96), transparent 38%),
+      linear-gradient(135deg, #fffaf2 0%, #f7f1e8 56%, #eadcc9 100%);
+  }
+
+  .contact-form {
+    @apply grid gap-5 md:grid-cols-2;
+  }
+
+  .contact-form label {
+    @apply flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    @apply rounded-2xl border border-neutral-950/10 bg-milk px-5 py-4 text-base normal-case tracking-normal text-neutral-950 outline-none transition duration-300 focus:border-rosewood/50 focus:bg-porcelain focus:ring-2 focus:ring-rosewood/10;
+  }
+
+  .contact-faq-list {
+    @apply space-y-4;
+  }
+
+  .contact-faq-item {
+    @apply overflow-hidden rounded-[1.25rem] border border-neutral-950/10 bg-milk shadow-soft transition duration-700 ease-out hover:border-rosewood/30;
+  }
+
+  .contact-faq-trigger {
+    @apply flex w-full items-center justify-between gap-6 px-6 py-6 text-left font-display text-2xl leading-tight text-neutral-950;
+  }
+
+  .contact-page-cta {
+    @apply mx-auto max-w-4xl rounded-[1.5rem] border border-neutral-950/10 bg-milk px-6 py-12 text-center shadow-soft transition duration-700 ease-out md:px-10 md:py-16;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255, 250, 242, 0.98), transparent 48%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
+  .footer-shell {
+    @apply border-t border-neutral-950/10 text-neutral-950;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(255, 250, 242, 0.78), transparent 38%),
+      linear-gradient(180deg, #eadfcc 0%, #dccbb5 100%);
+  }
+
+  .footer-link {
+    @apply inline-flex text-sm leading-6 text-neutral-950/70 transition duration-300 hover:translate-x-1 hover:text-rosewood;
+  }
+
+  .footer-social-link {
+    @apply grid h-11 w-11 place-items-center rounded-full border border-neutral-950/10 bg-milk/70 text-neutral-950/75 transition duration-300 hover:-translate-y-1 hover:border-rosewood/30 hover:bg-porcelain hover:text-rosewood hover:shadow-soft;
+  }
+
+  .reveal-on-scroll {
+    @apply translate-y-8 opacity-0 transition duration-700 ease-out;
+  }
+
+  .reveal-on-scroll.is-visible {
+    @apply translate-y-0 opacity-100;
+  }
+}
+
+@media (max-width: 640px) {
+  .btn {
+    @apply w-full px-5;
+  }
+
+  .section {
+    @apply py-16;
+  }
+
+  .section-heading {
+    @apply mb-9;
+  }
+
+  .section-heading h2 {
+    @apply text-4xl;
+  }
+
+  .hero-image-panel {
+    @apply min-h-[320px] rounded-[1.25rem];
+  }
+
+  .about-story {
+    @apply py-14;
+  }
+
+  .about-stats {
+    @apply mt-10;
+  }
+
+  .tailoring-image-frame {
+    @apply h-[22rem];
+  }
+
+  .tailoring-step-card {
+    @apply min-h-[20rem];
+  }
+
+  .haft-shell {
+    @apply px-5 py-12;
+  }
+
+  .haft-card {
+    @apply min-h-64;
+  }
+
+  .courses-image-frame {
+    @apply h-[22rem];
+  }
+
+  .courses-card {
+    @apply min-h-[20rem];
+  }
+
+  .tailoring-page-hero-image,
+  .tailoring-final-image {
+    @apply h-[22rem] min-h-0;
+  }
+
+  .tailoring-process-card {
+    @apply min-h-64;
+  }
+
+  .tailoring-benefit-card {
+    @apply min-h-64;
+  }
+
+  .tailoring-product-image {
+    @apply h-60;
+  }
+
+  .haft-page-hero-image {
+    @apply h-[22rem] min-h-0;
+  }
+
+  .haft-page-card,
+  .haft-order-card,
+  .haft-audience-card,
+  .haft-benefit-card {
+    @apply min-h-64;
+  }
+
+  .courses-page-hero-image {
+    @apply h-[22rem] min-h-0;
+  }
+
+  .courses-page-card,
+  .courses-process-card,
+  .courses-reason-card {
+    @apply min-h-64;
+  }
+
+  .courses-skill-card {
+    @apply min-h-48;
+  }
+
+  .contact-detail-card {
+    @apply min-h-56;
+  }
+
+  .contact-form-shell {
+    @apply p-6;
+  }
+}
+
+@media (hover: none) {
+  .collection-button {
+    @apply pointer-events-auto translate-y-0 bg-milk text-neutral-950 opacity-100;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
