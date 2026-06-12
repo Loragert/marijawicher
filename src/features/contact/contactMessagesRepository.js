@@ -25,41 +25,25 @@ export async function createContactMessage(message) {
     };
   }
 
-  const response = await fetch(
-    `${supabaseConfig.url.replace(/\/$/, "")}/rest/v1/contact_messages?select=${contactMessageSelect}`,
-    {
-      method: "POST",
-      headers: {
-        apikey: supabaseConfig.anonKey,
-        Authorization: `Bearer ${supabaseConfig.anonKey}`,
-        "Content-Type": "application/json",
-        Prefer: "return=representation",
+  const { data, error, status } = await supabase
+    .from("contact_messages")
+    .insert([
+      {
+        ...message,
+        status: "new",
       },
-      body: JSON.stringify([
-        {
-          ...message,
-          status: "new",
-        },
-      ]),
-    },
-  );
-
-  const data = await response.json().catch(() => null);
-
-  if (!response.ok) {
-    return {
-      data: null,
-      error: data || new Error("Nie udalo sie wyslac wiadomosci."),
-      status: response.status,
-    };
-  }
+    ])
+    .select(contactMessageSelect)
+    .single();
 
   return {
-    data: Array.isArray(data) ? data[0] : data,
-    error: null,
-    status: response.status,
+    data,
+    error,
+    status: error ? status || 400 : status || 201,
   };
 }
+
+  
 
 export function getAdminContactMessages() {
   return supabaseRequest(
