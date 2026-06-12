@@ -41,7 +41,7 @@ export const footerColumns = [
     title: "Informacje",
     items: [
       { label: "Kontakt", href: "#/kontakt" },
-      { label: "FAQ", href: "#/kontakt" },
+      { label: "FAQ", href: "#/faq" },
       { label: "Polityka prywatności", href: "#/polityka-prywatnosci" },
       { label: "Regulamin", href: "#/regulamin" },
     ],

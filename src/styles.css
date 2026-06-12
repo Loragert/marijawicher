@@ -517,6 +517,13 @@ body {
     @apply space-y-4;
   }
 
+  .faq-section {
+    @apply rounded-[1.5rem] border border-neutral-950/10 bg-milk p-6 shadow-soft md:p-8 lg:p-10;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(255, 250, 242, 0.96), transparent 38%),
+      linear-gradient(180deg, #fffaf2 0%, #f7f1e8 100%);
+  }
+
   .contact-faq-item {
     @apply overflow-hidden rounded-[1.25rem] border border-neutral-950/10 bg-milk shadow-soft transition duration-700 ease-out hover:border-rosewood/30;
   }

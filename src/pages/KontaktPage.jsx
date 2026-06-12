@@ -1,4 +1,4 @@
-import { ChevronDown, Clock, Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
+import { Clock, Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { createContactMessage } from "../features/contact/contactMessagesRepository.js";
 
@@ -41,47 +41,7 @@ const contactDetails = [
   },
 ];
 
-const faqItems = [
-  {
-    question: <>Jak um&#243;wi&#263; szycie na miar&#281;?</>,
-    answer: (
-      <>
-        Skontaktuj si&#281; z nami telefonicznie, mailowo lub przez formularz. Ustalimy
-        termin konsultacji i om&#243;wimy szczeg&#243;&#322;y projektu.
-      </>
-    ),
-  },
-  {
-    question: <>Jak zam&#243;wi&#263; haft komputerowy?</>,
-    answer: (
-      <>
-        Prze&#347;lij tekst, logo lub opis pomys&#322;u. Przygotujemy propozycj&#281; haftu i
-        ustalimy szczeg&#243;&#322;y realizacji.
-      </>
-    ),
-  },
-  {
-    question: <>Czy kursy s&#261; dla pocz&#261;tkuj&#261;cych?</>,
-    answer: (
-      <>
-        Tak, prowadzimy zaj&#281;cia zar&#243;wno dla os&#243;b pocz&#261;tkuj&#261;cych, jak i dla
-        tych, kt&#243;re chc&#261; rozwija&#263; swoje umiej&#281;tno&#347;ci.
-      </>
-    ),
-  },
-  {
-    question: <>Czy mo&#380;na um&#243;wi&#263; konsultacj&#281; indywidualn&#261;?</>,
-    answer: (
-      <>
-        Tak, istnieje mo&#380;liwo&#347;&#263; indywidualnego spotkania i om&#243;wienia projektu
-        lub zakresu nauki.
-      </>
-    ),
-  },
-];
-
 function KontaktPage() {
-  const [openFaq, setOpenFaq] = useState(0);
   const [form, setForm] = useState(emptyContactForm);
   const [isSending, setIsSending] = useState(false);
   const [statusMessage, setStatusMessage] = useState({ type: "", text: null });
@@ -283,51 +243,6 @@ function KontaktPage() {
               )}
             </div>
           </form>
-        </div>
-      </section>
-
-      <section className="section reveal-on-scroll">
-        <div className="section-heading">
-          <p className="eyebrow">FAQ</p>
-          <h2>Najcz&#281;stsze pytania</h2>
-        </div>
-        <div className="contact-faq-list">
-          {faqItems.map((item, index) => {
-            const isOpen = openFaq === index;
-
-            return (
-              <article key={index} className="contact-faq-item reveal-on-scroll">
-                <button
-                  type="button"
-                  className="contact-faq-trigger"
-                  aria-expanded={isOpen}
-                  onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                >
-                  <span>{item.question}</span>
-                  <ChevronDown
-                    className={`transition duration-500 ${isOpen ? "rotate-180" : ""}`}
-                    size={22}
-                    aria-hidden="true"
-                  />
-                </button>
-                {isOpen && <p className="px-6 pb-6 leading-7 text-stone">{item.answer}</p>}
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="section reveal-on-scroll pb-24 md:pb-32">
-        <div className="contact-page-cta">
-          <h2 className="font-display text-4xl leading-tight md:text-6xl">
-            Porozmawiajmy o Twoim projekcie
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-stone">
-            Napisz lub zadzwo&#324; do nas, a wsp&#243;lnie stworzymy co&#347; wyj&#261;tkowego.
-          </p>
-          <a className="btn btn-primary mt-9" href="mailto:skkmarija@gmail.com">
-            SKONTAKTUJ SI&#280;
-          </a>
         </div>
       </section>
     </>

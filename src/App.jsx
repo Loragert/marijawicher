@@ -13,6 +13,7 @@ import AdminLoginPage from "./pages/AdminLoginPage.jsx";
 import AdminMessagesPage from "./pages/AdminMessagesPage.jsx";
 import AdminProductsPage from "./pages/AdminProductsPage.jsx";
 import DostawaPage from "./pages/DostawaPage.jsx";
+import FaqPage from "./pages/FaqPage.jsx";
 import HaftPage from "./pages/HaftPage.jsx";
 import KontaktPage from "./pages/KontaktPage.jsx";
 import KursyPage from "./pages/KursyPage.jsx";
@@ -40,6 +41,7 @@ const pageRoutes = {
   "o-marce": OMarcePage,
   sklep: SklepPage,
   kontakt: KontaktPage,
+  faq: FaqPage,
   dostawa: DostawaPage,
   "zwroty-i-reklamacje": ZwrotyReklamacjePage,
   "polityka-prywatnosci": PolitykaPrywatnosciPage,
