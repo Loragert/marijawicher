@@ -1,14 +1,16 @@
-import { FolderKanban, LayoutDashboard, Package, Tags } from "lucide-react";
+import { FolderKanban, Inbox, LayoutDashboard, Package, Tags } from "lucide-react";
 import { useEffect, useState } from "react";
 import AdminLayout from "../components/AdminLayout.jsx";
 import { getAdminCategories } from "../features/catalog/categoriesRepository.js";
 import { getAdminCollections } from "../features/catalog/collectionsRepository.js";
 import { getAdminProducts } from "../features/catalog/productsRepository.js";
+import { getAdminContactMessages } from "../features/contact/contactMessagesRepository.js";
 
 const dashboardLinks = [
   { href: "#/admin/products", label: "Produkty", icon: Package },
   { href: "#/admin/categories", label: "Kategorie", icon: Tags },
   { href: "#/admin/collections", label: "Kolekcje", icon: FolderKanban },
+  { href: "#/admin/messages", label: "Wiadomości", icon: Inbox },
 ];
 
 function AdminDashboardPage() {
@@ -18,18 +20,26 @@ function AdminDashboardPage() {
     hiddenProducts: 0,
     categories: 0,
     collections: 0,
+    messages: 0,
   });
   const [status, setStatus] = useState("");
 
   useEffect(() => {
     async function loadStats() {
-      const [productsResult, categoriesResult, collectionsResult] = await Promise.all([
-        getAdminProducts(),
-        getAdminCategories(),
-        getAdminCollections(),
-      ]);
+      const [productsResult, categoriesResult, collectionsResult, messagesResult] =
+        await Promise.all([
+          getAdminProducts(),
+          getAdminCategories(),
+          getAdminCollections(),
+          getAdminContactMessages(),
+        ]);
 
-      if (productsResult.error || categoriesResult.error || collectionsResult.error) {
+      if (
+        productsResult.error ||
+        categoriesResult.error ||
+        collectionsResult.error ||
+        messagesResult.error
+      ) {
         setStatus("Nie udało się pobrać statystyk. Sprawdź Supabase i uprawnienia RLS.");
         return;
       }
@@ -41,6 +51,7 @@ function AdminDashboardPage() {
         hiddenProducts: products.filter((product) => !product.is_active).length,
         categories: (categoriesResult.data || []).length,
         collections: (collectionsResult.data || []).length,
+        messages: (messagesResult.data || []).length,
       });
     }
 
@@ -55,7 +66,7 @@ function AdminDashboardPage() {
             <p className="eyebrow">ADMIN</p>
             <h1 className="font-display text-5xl leading-tight md:text-7xl">Dashboard</h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-stone">
-              Szybki podgląd katalogu produktów, kategorii i kolekcji MARIJA.
+              Szybki podgląd katalogu produktów, kategorii, kolekcji i wiadomości MARIJA.
             </p>
           </div>
 
@@ -65,13 +76,14 @@ function AdminDashboardPage() {
             </div>
           )}
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
             {[
               ["Wszystkie produkty", stats.products],
               ["Aktywne produkty", stats.activeProducts],
               ["Ukryte produkty", stats.hiddenProducts],
               ["Kategorie", stats.categories],
               ["Kolekcje", stats.collections],
+              ["Wiadomości", stats.messages],
             ].map(([label, value]) => (
               <article
                 className="rounded-[1.5rem] border border-neutral-950/10 bg-milk p-6 shadow-soft"
@@ -83,7 +95,7 @@ function AdminDashboardPage() {
             ))}
           </div>
 
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {dashboardLinks.map(({ href, label, icon: Icon }) => (
               <a
                 className="group rounded-[1.5rem] border border-neutral-950/10 bg-milk p-6 shadow-soft transition duration-500 hover:-translate-y-1 hover:shadow-xl"

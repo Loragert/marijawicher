@@ -10,6 +10,7 @@ import AdminCategoriesPage from "./pages/AdminCategoriesPage.jsx";
 import AdminCollectionsPage from "./pages/AdminCollectionsPage.jsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.jsx";
 import AdminLoginPage from "./pages/AdminLoginPage.jsx";
+import AdminMessagesPage from "./pages/AdminMessagesPage.jsx";
 import AdminProductsPage from "./pages/AdminProductsPage.jsx";
 import DostawaPage from "./pages/DostawaPage.jsx";
 import HaftPage from "./pages/HaftPage.jsx";
@@ -31,6 +32,7 @@ const pageRoutes = {
   "admin/products": AdminProductsPage,
   "admin/categories": AdminCategoriesPage,
   "admin/collections": AdminCollectionsPage,
+  "admin/messages": AdminMessagesPage,
   "szycie-na-miare": SzycieNaMiarePage,
   haft: HaftPage,
   kursy: KursyPage,

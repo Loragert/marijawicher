@@ -1,5 +1,14 @@
-import { ChevronDown, Clock, Mail, MapPin, Phone, Send } from "lucide-react";
+import { ChevronDown, Clock, Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
+import { createContactMessage } from "../features/contact/contactMessagesRepository.js";
+
+const emptyContactForm = {
+  name: "",
+  email: "",
+  phone: "",
+  subject: "",
+  message: "",
+};
 
 const contactDetails = [
   {
@@ -21,7 +30,7 @@ const contactDetails = [
   },
   {
     title: "Godziny kontaktu",
-    value: "Poniedziałek – Piątek\n08:00 – 17:00",
+    value: "Poniedziałek - Piątek\n08:00 - 17:00",
     Icon: Clock,
   },
 ];
@@ -51,12 +60,61 @@ const faqItems = [
 
 function KontaktPage() {
   const [openFaq, setOpenFaq] = useState(0);
-  const [statusMessage, setStatusMessage] = useState("");
+  const [form, setForm] = useState(emptyContactForm);
+  const [isSending, setIsSending] = useState(false);
+  const [statusMessage, setStatusMessage] = useState({ type: "", text: "" });
 
-  function handleSubmit(event) {
+  function updateField(name, value) {
+    setForm((currentForm) => ({ ...currentForm, [name]: value }));
+  }
+
+  async function sendContactMessage(payload) {
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        return { error: null };
+      }
+    } catch {
+      // Local Vite development may not expose /api/contact. The Supabase fallback keeps the form testable.
+    }
+
+    return createContactMessage(payload);
+  }
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    // TODO: connect contact form to backend/admin panel endpoint
-    setStatusMessage("Formularz jest przygotowany do integracji z panelem administracyjnym.");
+    setIsSending(true);
+    setStatusMessage({ type: "", text: "" });
+
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      subject: form.subject.trim(),
+      message: form.message.trim(),
+    };
+
+    const result = await sendContactMessage(payload);
+    setIsSending(false);
+
+    if (result.error) {
+      setStatusMessage({
+        type: "error",
+        text: "Nie udało się wysłać wiadomości. Spróbuj ponownie lub skontaktuj się telefonicznie.",
+      });
+      return;
+    }
+
+    setForm(emptyContactForm);
+    setStatusMessage({
+      type: "success",
+      text: "Wiadomość została wysłana. Skontaktujemy się z Tobą najszybciej jak to możliwe.",
+    });
   }
 
   return (
@@ -130,32 +188,69 @@ function KontaktPage() {
           <form className="contact-form" onSubmit={handleSubmit}>
             <label>
               Imię
-              <input name="name" type="text" autoComplete="name" required />
+              <input
+                name="name"
+                type="text"
+                autoComplete="name"
+                value={form.name}
+                onChange={(event) => updateField("name", event.target.value)}
+                required
+              />
             </label>
             <label>
               Email
-              <input name="email" type="email" autoComplete="email" required />
+              <input
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={form.email}
+                onChange={(event) => updateField("email", event.target.value)}
+                required
+              />
             </label>
             <label>
               Telefon
-              <input name="phone" type="tel" autoComplete="tel" />
+              <input
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                value={form.phone}
+                onChange={(event) => updateField("phone", event.target.value)}
+              />
             </label>
             <label>
               Temat
-              <input name="subject" type="text" required />
+              <input
+                name="subject"
+                type="text"
+                value={form.subject}
+                onChange={(event) => updateField("subject", event.target.value)}
+                required
+              />
             </label>
             <label className="md:col-span-2">
               Wiadomość
-              <textarea name="message" rows="6" required />
+              <textarea
+                name="message"
+                rows="6"
+                value={form.message}
+                onChange={(event) => updateField("message", event.target.value)}
+                required
+              />
             </label>
             <div className="flex flex-col gap-4 md:col-span-2 md:flex-row md:items-center">
-              <button className="btn btn-primary" type="submit">
-                WYŚLIJ WIADOMOŚĆ
-                <Send size={18} aria-hidden="true" />
+              <button className="btn btn-primary" type="submit" disabled={isSending}>
+                {isSending ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
+                {isSending ? "WYSYŁANIE..." : "WYŚLIJ WIADOMOŚĆ"}
               </button>
-              {statusMessage && (
-                <p className="text-sm leading-6 text-stone" role="status">
-                  {statusMessage}
+              {statusMessage.text && (
+                <p
+                  className={`text-sm leading-6 ${
+                    statusMessage.type === "error" ? "text-rosewood" : "text-stone"
+                  }`}
+                  role="status"
+                >
+                  {statusMessage.text}
                 </p>
               )}
             </div>
