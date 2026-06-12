@@ -15,6 +15,7 @@ import {
   getActiveProductDetailBySlug,
   getActiveProducts,
 } from "../features/catalog/productsRepository.js";
+import { useCart } from "../features/cart/CartContext.jsx";
 
 function formatPrice(value) {
   return new Intl.NumberFormat("pl-PL", {
@@ -69,6 +70,7 @@ function RelatedProductCard({ product }) {
 }
 
 function ProductPage({ slug }) {
+  const { addItem } = useCart();
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -196,7 +198,8 @@ function ProductPage({ slug }) {
   }, [product, relatedProducts.length]);
 
   function handleAddToCart() {
-    setCartNotice("Koszyk zostanie uruchomiony w kolejnym etapie.");
+    addItem(product);
+    setCartNotice("Produkt został dodany do koszyka.");
   }
 
   function showPreviousImage() {

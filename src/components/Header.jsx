@@ -1,6 +1,7 @@
 ﻿import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { useState } from "react";
 import { navigation } from "../data/navigation.js";
+import { useCart } from "../features/cart/CartContext.jsx";
 
 function getNavigationRoute(href) {
   return href.replace(/^#\/?/, "").replace(/^\//, "") || "";
@@ -22,6 +23,7 @@ function isNavigationItemActive(item, currentRoute) {
 
 function Header({ currentRoute = "" }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { itemCount } = useCart();
 
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-950/10 bg-porcelain/90 backdrop-blur-xl">
@@ -57,9 +59,14 @@ function Header({ currentRoute = "" }) {
           <button className="icon-button" aria-label="Profil użytkownika">
             <User size={20} aria-hidden="true" />
           </button>
-          <button className="icon-button" aria-label="Koszyk">
+          <a className="icon-button relative" href="#/cart" aria-label="Koszyk">
             <ShoppingBag size={20} aria-hidden="true" />
-          </button>
+            {itemCount > 0 && (
+              <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-rosewood px-1 text-[0.65rem] font-semibold leading-none text-milk">
+                {itemCount}
+              </span>
+            )}
+          </a>
           <button
             className="icon-button lg:hidden"
             aria-label={isOpen ? "Zamknij menu" : "Otwórz menu"}

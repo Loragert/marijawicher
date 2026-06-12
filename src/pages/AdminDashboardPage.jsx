@@ -1,16 +1,18 @@
-import { FolderKanban, Inbox, LayoutDashboard, Package, Tags } from "lucide-react";
+import { ClipboardList, FolderKanban, Inbox, LayoutDashboard, Package, Tags } from "lucide-react";
 import { useEffect, useState } from "react";
 import AdminLayout from "../components/AdminLayout.jsx";
 import { getAdminCategories } from "../features/catalog/categoriesRepository.js";
 import { getAdminCollections } from "../features/catalog/collectionsRepository.js";
 import { getAdminProducts } from "../features/catalog/productsRepository.js";
 import { getAdminContactMessages } from "../features/contact/contactMessagesRepository.js";
+import { getAdminOrders } from "../features/orders/ordersRepository.js";
 
 const dashboardLinks = [
   { href: "#/admin/products", label: "Produkty", icon: Package },
   { href: "#/admin/categories", label: "Kategorie", icon: Tags },
   { href: "#/admin/collections", label: "Kolekcje", icon: FolderKanban },
   { href: "#/admin/messages", label: "Wiadomości", icon: Inbox },
+  { href: "#/admin/orders", label: "Zamówienia", icon: ClipboardList },
 ];
 
 function AdminDashboardPage() {
@@ -21,24 +23,27 @@ function AdminDashboardPage() {
     categories: 0,
     collections: 0,
     messages: 0,
+    orders: 0,
   });
   const [status, setStatus] = useState("");
 
   useEffect(() => {
     async function loadStats() {
-      const [productsResult, categoriesResult, collectionsResult, messagesResult] =
+      const [productsResult, categoriesResult, collectionsResult, messagesResult, ordersResult] =
         await Promise.all([
           getAdminProducts(),
           getAdminCategories(),
           getAdminCollections(),
           getAdminContactMessages(),
+          getAdminOrders(),
         ]);
 
       if (
         productsResult.error ||
         categoriesResult.error ||
         collectionsResult.error ||
-        messagesResult.error
+        messagesResult.error ||
+        ordersResult.error
       ) {
         setStatus("Nie udało się pobrać statystyk. Sprawdź Supabase i uprawnienia RLS.");
         return;
@@ -52,6 +57,7 @@ function AdminDashboardPage() {
         categories: (categoriesResult.data || []).length,
         collections: (collectionsResult.data || []).length,
         messages: (messagesResult.data || []).length,
+        orders: (ordersResult.data || []).length,
       });
     }
 
@@ -84,6 +90,7 @@ function AdminDashboardPage() {
               ["Kategorie", stats.categories],
               ["Kolekcje", stats.collections],
               ["Wiadomości", stats.messages],
+              ["Zamówienia", stats.orders],
             ].map(([label, value]) => (
               <article
                 className="rounded-[1.5rem] border border-neutral-950/10 bg-milk p-6 shadow-soft"
@@ -95,7 +102,7 @@ function AdminDashboardPage() {
             ))}
           </div>
 
-          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             {dashboardLinks.map(({ href, label, icon: Icon }) => (
               <a
                 className="group rounded-[1.5rem] border border-neutral-950/10 bg-milk p-6 shadow-soft transition duration-500 hover:-translate-y-1 hover:shadow-xl"

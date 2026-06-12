@@ -7,6 +7,7 @@ const adminLinks = [
   { label: "Kategorie", href: "#/admin/categories" },
   { label: "Kolekcje", href: "#/admin/collections" },
   { label: "Wiadomości", href: "#/admin/messages" },
+  { label: "Zamówienia", href: "#/admin/orders" },
 ];
 
 function AdminLayout({ title, description, children }) {

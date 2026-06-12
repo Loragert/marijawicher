@@ -6,12 +6,16 @@ import Footer from "./components/Footer.jsx";
 import Header from "./components/Header.jsx";
 import HeroSection from "./components/HeroSection.jsx";
 import HomeDirectionsSection from "./components/HomeDirectionsSection.jsx";
+import { CartProvider } from "./features/cart/CartContext.jsx";
 import AdminCategoriesPage from "./pages/AdminCategoriesPage.jsx";
 import AdminCollectionsPage from "./pages/AdminCollectionsPage.jsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.jsx";
 import AdminLoginPage from "./pages/AdminLoginPage.jsx";
 import AdminMessagesPage from "./pages/AdminMessagesPage.jsx";
+import AdminOrdersPage from "./pages/AdminOrdersPage.jsx";
 import AdminProductsPage from "./pages/AdminProductsPage.jsx";
+import CartPage from "./pages/CartPage.jsx";
+import CheckoutPage from "./pages/CheckoutPage.jsx";
 import DostawaPage from "./pages/DostawaPage.jsx";
 import FaqPage from "./pages/FaqPage.jsx";
 import HaftPage from "./pages/HaftPage.jsx";
@@ -34,6 +38,9 @@ const pageRoutes = {
   "admin/categories": AdminCategoriesPage,
   "admin/collections": AdminCollectionsPage,
   "admin/messages": AdminMessagesPage,
+  "admin/orders": AdminOrdersPage,
+  cart: CartPage,
+  checkout: CheckoutPage,
   "szycie-na-miare": SzycieNaMiarePage,
   haft: HaftPage,
   kursy: KursyPage,
@@ -160,21 +167,23 @@ function App() {
   }, [EffectivePageComponent, sectionId]);
 
   return (
-    <div className="min-h-screen bg-porcelain text-neutral-950">
-      <Header currentRoute={route} />
-      <main>
-        {productSlug ? (
-          <ProductPage slug={decodeURIComponent(productSlug)} />
-        ) : EffectivePageComponent ? (
-          <EffectivePageComponent />
-        ) : (
-          <HomePage />
-        )}
-      </main>
-      <div id="kontakt">
-        <Footer />
+    <CartProvider>
+      <div className="min-h-screen bg-porcelain text-neutral-950">
+        <Header currentRoute={route} />
+        <main>
+          {productSlug ? (
+            <ProductPage slug={decodeURIComponent(productSlug)} />
+          ) : EffectivePageComponent ? (
+            <EffectivePageComponent />
+          ) : (
+            <HomePage />
+          )}
+        </main>
+        <div id="kontakt">
+          <Footer />
+        </div>
       </div>
-    </div>
+    </CartProvider>
   );
 }
 
