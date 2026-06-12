@@ -1,4 +1,4 @@
-import { supabaseBrowserClient, supabaseRequest } from "../../lib/supabaseClient.js";
+import { supabaseConfig, supabaseRequest } from "../../lib/supabaseClient.js";
 
 export const contactMessageStatuses = [
   { value: "new", label: "Nowe" },
@@ -17,27 +17,47 @@ const contactMessageSelect =
   "id,created_at,updated_at,name,email,phone,subject,message,status";
 
 export async function createContactMessage(message) {
-  if (!supabaseBrowserClient) {
+  if (!supabaseConfig.isConfigured) {
     return {
       data: null,
-      error: new Error("Brakuje konfiguracji Supabase."),
+      error: new Error("Brakuje VITE_SUPABASE_URL lub VITE_SUPABASE_ANON_KEY."),
       status: 0,
     };
   }
 
-  const result = await supabaseBrowserClient
-    .from("contact_messages")
-    .insert({
-      ...message,
-      status: "new",
-    })
-    .select(contactMessageSelect)
-    .single();
+  const response = await fetch(
+    `${supabaseConfig.url.replace(/\/$/, "")}/rest/v1/contact_messages?select=${contactMessageSelect}`,
+    {
+      method: "POST",
+      headers: {
+        apikey: supabaseConfig.anonKey,
+        Authorization: `Bearer ${supabaseConfig.anonKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify([
+        {
+          ...message,
+          status: "new",
+        },
+      ]),
+    },
+  );
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    return {
+      data: null,
+      error: data || new Error("Nie udalo sie wyslac wiadomosci."),
+      status: response.status,
+    };
+  }
 
   return {
-    data: result.data,
-    error: result.error,
-    status: result.status,
+    data: Array.isArray(data) ? data[0] : data,
+    error: null,
+    status: response.status,
   };
 }
 
