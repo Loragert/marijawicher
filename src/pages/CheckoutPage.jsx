@@ -1,8 +1,10 @@
 import { Loader2, Send } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCustomerProfile } from "../features/account/customerProfilesRepository.js";
 import { useCart } from "../features/cart/CartContext.jsx";
 import { formatCartPrice } from "../features/cart/cartModel.js";
 import { createOrder } from "../features/orders/ordersRepository.js";
+import { getCustomerSession, isCustomerLoggedIn } from "../lib/customerAuth.js";
 
 const emptyCheckoutForm = {
   customer_name: "",
@@ -17,9 +19,35 @@ const emptyCheckoutForm = {
 function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart();
   const [form, setForm] = useState(emptyCheckoutForm);
+  const [customerSession, setCustomerSession] = useState(() => getCustomerSession());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
   const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    async function prefillCustomerData() {
+      if (!isCustomerLoggedIn()) {
+        return;
+      }
+
+      const session = getCustomerSession();
+      setCustomerSession(session);
+      const profileResult = await getCustomerProfile();
+      const profile = profileResult.data || {};
+
+      setForm((currentForm) => ({
+        ...currentForm,
+        customer_email: session?.user?.email || currentForm.customer_email,
+        customer_name: profile.full_name || currentForm.customer_name,
+        customer_phone: profile.phone || currentForm.customer_phone,
+        street: profile.street || currentForm.street,
+        postal_code: profile.postal_code || currentForm.postal_code,
+        city: profile.city || currentForm.city,
+      }));
+    }
+
+    prefillCustomerData();
+  }, []);
 
   function updateField(name, value) {
     setForm((currentForm) => ({ ...currentForm, [name]: value }));
@@ -38,6 +66,7 @@ function CheckoutPage() {
 
     const payload = {
       ...form,
+      ...(customerSession?.user?.id ? { customer_id: customerSession.user.id } : {}),
       items: items.map((item) => ({
         product_id: item.id,
         title: item.title,
@@ -50,7 +79,9 @@ function CheckoutPage() {
       status: "new",
     };
 
-    const result = await createOrder(payload);
+    const result = await createOrder(payload, {
+      accessToken: customerSession?.access_token,
+    });
     setIsSubmitting(false);
 
     if (result.error) {
@@ -81,6 +112,11 @@ function CheckoutPage() {
               Skontaktujemy si&#281; z Tob&#261; w celu potwierdzenia szczeg&#243;&#322;&#243;w
               realizacji.
             </p>
+            <p className="mx-auto mt-5 max-w-2xl rounded-2xl border border-neutral-950/10 bg-porcelain p-5 text-sm leading-6 text-stone">
+              Zam&#243;wienie nie wymaga p&#322;atno&#347;ci online. Po otrzymaniu
+              zam&#243;wienia skontaktujemy si&#281; z Tob&#261;, aby potwierdzi&#263;
+              szczeg&#243;&#322;y, termin realizacji oraz spos&#243;b p&#322;atno&#347;ci.
+            </p>
             <a className="btn btn-primary mt-9" href="/">
               Powr&#243;t do strony g&#322;&#243;wnej
             </a>
@@ -99,6 +135,12 @@ function CheckoutPage() {
             Dane do zam&#243;wienia
           </h1>
         </header>
+
+        <div className="reveal-on-scroll mb-8 rounded-[1.5rem] border border-neutral-950/10 bg-milk p-5 text-sm leading-6 text-stone shadow-soft md:p-6">
+          Zam&#243;wienie nie wymaga p&#322;atno&#347;ci online. Po otrzymaniu
+          zam&#243;wienia skontaktujemy si&#281; z Tob&#261;, aby potwierdzi&#263;
+          szczeg&#243;&#322;y, termin realizacji oraz spos&#243;b p&#322;atno&#347;ci.
+        </div>
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start">
           <form

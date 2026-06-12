@@ -1,7 +1,8 @@
 ﻿import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { navigation } from "../data/navigation.js";
 import { useCart } from "../features/cart/CartContext.jsx";
+import { isCustomerLoggedIn } from "../lib/customerAuth.js";
 
 function getNavigationRoute(href) {
   return href.replace(/^#\/?/, "").replace(/^\//, "") || "";
@@ -23,7 +24,17 @@ function isNavigationItemActive(item, currentRoute) {
 
 function Header({ currentRoute = "" }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [customerLoggedIn, setCustomerLoggedIn] = useState(isCustomerLoggedIn);
   const { itemCount } = useCart();
+
+  useEffect(() => {
+    const handleCustomerAuthChange = () => setCustomerLoggedIn(isCustomerLoggedIn());
+    window.addEventListener("marija-customer-auth-change", handleCustomerAuthChange);
+
+    return () => {
+      window.removeEventListener("marija-customer-auth-change", handleCustomerAuthChange);
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-950/10 bg-porcelain/90 backdrop-blur-xl">
@@ -56,9 +67,20 @@ function Header({ currentRoute = "" }) {
           <button className="icon-button" aria-label="Szukaj">
             <Search size={20} aria-hidden="true" />
           </button>
-          <button className="icon-button" aria-label="Profil użytkownika">
+          <a
+            className="icon-button"
+            href={customerLoggedIn ? "#/account" : "#/login"}
+            aria-label={customerLoggedIn ? "Moje konto" : "Zaloguj się"}
+            title={customerLoggedIn ? "Moje konto" : "Zaloguj się"}
+          >
             <User size={20} aria-hidden="true" />
-          </button>
+          </a>
+          <a
+            className="hidden text-xs font-semibold uppercase tracking-[0.16em] text-stone transition hover:text-rosewood sm:inline-flex"
+            href={customerLoggedIn ? "#/account" : "#/login"}
+          >
+            {customerLoggedIn ? "Moje konto" : "Zaloguj się"}
+          </a>
           <a className="icon-button relative" href="#/cart" aria-label="Koszyk">
             <ShoppingBag size={20} aria-hidden="true" />
             {itemCount > 0 && (

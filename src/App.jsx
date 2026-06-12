@@ -7,6 +7,7 @@ import Header from "./components/Header.jsx";
 import HeroSection from "./components/HeroSection.jsx";
 import HomeDirectionsSection from "./components/HomeDirectionsSection.jsx";
 import { CartProvider } from "./features/cart/CartContext.jsx";
+import AccountPage from "./pages/AccountPage.jsx";
 import AdminCategoriesPage from "./pages/AdminCategoriesPage.jsx";
 import AdminCollectionsPage from "./pages/AdminCollectionsPage.jsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.jsx";
@@ -21,11 +22,13 @@ import FaqPage from "./pages/FaqPage.jsx";
 import HaftPage from "./pages/HaftPage.jsx";
 import KontaktPage from "./pages/KontaktPage.jsx";
 import KursyPage from "./pages/KursyPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
 import OMarijiPage from "./pages/OMarijiPage.jsx";
 import OMarcePage from "./pages/OMarcePage.jsx";
 import PolitykaPrywatnosciPage from "./pages/PolitykaPrywatnosciPage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import RegulaminPage from "./pages/RegulaminPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 import SklepPage from "./pages/SklepPage.jsx";
 import SzycieNaMiarePage from "./pages/SzycieNaMiarePage.jsx";
 import ZwrotyReklamacjePage from "./pages/ZwrotyReklamacjePage.jsx";
@@ -39,6 +42,9 @@ const pageRoutes = {
   "admin/collections": AdminCollectionsPage,
   "admin/messages": AdminMessagesPage,
   "admin/orders": AdminOrdersPage,
+  account: AccountPage,
+  login: LoginPage,
+  register: RegisterPage,
   cart: CartPage,
   checkout: CheckoutPage,
   "szycie-na-miare": SzycieNaMiarePage,
