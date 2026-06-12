@@ -103,10 +103,34 @@ function KontaktPage() {
       message: form.message.trim(),
     };
 
-    const result = await createContactMessage(payload);
-    setIsSending(false);
+    try {
+      const result = await createContactMessage(payload);
 
-    if (result.error) {
+      if (result.error) {
+        setStatusMessage({
+          type: "error",
+          text: (
+            <>
+              Nie uda&#322;o si&#281; wys&#322;a&#263; wiadomo&#347;ci. Spr&#243;buj ponownie lub
+              skontaktuj si&#281; telefonicznie.
+            </>
+          ),
+        });
+        return;
+      }
+
+      setForm(emptyContactForm);
+      setStatusMessage({
+        type: "success",
+        text: (
+          <>
+            Wiadomo&#347;&#263; zosta&#322;a wys&#322;ana. Skontaktujemy si&#281; z Tob&#261;
+            najszybciej jak to mo&#380;liwe.
+          </>
+        ),
+      });
+    } catch (error) {
+      console.error("Contact form unexpected error", error);
       setStatusMessage({
         type: "error",
         text: (
@@ -116,19 +140,9 @@ function KontaktPage() {
           </>
         ),
       });
-      return;
+    } finally {
+      setIsSending(false);
     }
-
-    setForm(emptyContactForm);
-    setStatusMessage({
-      type: "success",
-      text: (
-        <>
-          Wiadomo&#347;&#263; zosta&#322;a wys&#322;ana. Skontaktujemy si&#281; z Tob&#261;
-          najszybciej jak to mo&#380;liwe.
-        </>
-      ),
-    });
   }
 
   return (

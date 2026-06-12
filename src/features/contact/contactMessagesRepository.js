@@ -1,4 +1,4 @@
-import { supabaseConfig, supabaseRequest } from "../../lib/supabaseClient.js";
+import { supabase, supabaseConfig, supabaseRequest } from "../../lib/supabaseClient.js";
 
 export const contactMessageStatuses = [
   { value: "new", label: "Nowe" },
@@ -17,47 +17,53 @@ const contactMessageSelect =
   "id,created_at,updated_at,name,email,phone,subject,message,status";
 
 export async function createContactMessage(message) {
-  if (!supabaseConfig.isConfigured) {
+  if (!supabaseConfig.isConfigured || !supabase) {
+    const error = new Error("Brakuje VITE_SUPABASE_URL lub VITE_SUPABASE_ANON_KEY.");
+    console.error("Contact form Supabase configuration error", {
+      hasUrl: Boolean(supabaseConfig.url),
+      hasAnonKey: Boolean(supabaseConfig.anonKey),
+    });
+
     return {
       data: null,
-      error: new Error("Brakuje VITE_SUPABASE_URL lub VITE_SUPABASE_ANON_KEY."),
+      error,
       status: 0,
     };
   }
 
-  const response = await fetch(
-    `${supabaseConfig.url.replace(/\/$/, "")}/rest/v1/contact_messages?select=${contactMessageSelect}`,
-    {
-      method: "POST",
-      headers: {
-        apikey: supabaseConfig.anonKey,
-        Authorization: `Bearer ${supabaseConfig.anonKey}`,
-        "Content-Type": "application/json",
-        Prefer: "return=representation",
+  const result = await supabase
+    .from("contact_messages")
+    .insert([
+      {
+        name: message.name,
+        email: message.email,
+        phone: message.phone || null,
+        subject: message.subject,
+        message: message.message,
+        status: "new",
       },
-      body: JSON.stringify([
-        {
-          ...message,
-          status: "new",
-        },
-      ]),
-    },
-  );
+    ])
+    .select(contactMessageSelect)
+    .single();
 
-  const data = await response.json().catch(() => null);
+  if (result.error) {
+    console.error("Contact form Supabase insert error", {
+      status: result.status,
+      statusText: result.statusText,
+      error: result.error,
+    });
 
-  if (!response.ok) {
     return {
       data: null,
-      error: data || new Error("Nie udalo sie wyslac wiadomosci."),
-      status: response.status,
+      error: result.error,
+      status: result.status,
     };
   }
 
   return {
-    data: Array.isArray(data) ? data[0] : data,
+    data: result.data,
     error: null,
-    status: response.status,
+    status: result.status,
   };
 }
 
