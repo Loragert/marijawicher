@@ -6,6 +6,8 @@ const adminLinks = [
   { label: "Produkty", href: "#/admin/products" },
   { label: "Kategorie", href: "#/admin/categories" },
   { label: "Kolekcje", href: "#/admin/collections" },
+  { label: "Kursy", href: "#/admin/courses" },
+  { label: "Zgłoszenia", href: "#/admin/course-applications" },
   { label: "Wiadomości", href: "#/admin/messages" },
   { label: "Zamówienia", href: "#/admin/orders" },
 ];

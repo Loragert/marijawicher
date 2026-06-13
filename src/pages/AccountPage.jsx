@@ -1,4 +1,4 @@
-import { Loader2, LogOut, PackageCheck, Save } from "lucide-react";
+import { BookOpen, Loader2, LogOut, PackageCheck, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   getCustomerSession,
@@ -10,6 +10,10 @@ import {
   upsertCustomerProfile,
 } from "../features/account/customerProfilesRepository.js";
 import { formatCartPrice } from "../features/cart/cartModel.js";
+import {
+  getCourseApplicationStatusLabel,
+  getCustomerCourseApplications,
+} from "../features/courses/coursesRepository.js";
 import { getCustomerOrders, getOrderStatusLabel } from "../features/orders/ordersRepository.js";
 
 const emptyProfileForm = {
@@ -33,6 +37,7 @@ function AccountPage() {
   const [session, setSession] = useState(() => getCustomerSession());
   const [profile, setProfile] = useState(emptyProfileForm);
   const [orders, setOrders] = useState([]);
+  const [courseApplications, setCourseApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
@@ -52,9 +57,10 @@ function AccountPage() {
     const currentSession = getCustomerSession();
     setSession(currentSession);
 
-    const [profileResult, ordersResult] = await Promise.all([
+    const [profileResult, ordersResult, courseApplicationsResult] = await Promise.all([
       getCustomerProfile(),
       getCustomerOrders(),
+      getCustomerCourseApplications(),
     ]);
 
     setIsLoading(false);
@@ -73,6 +79,13 @@ function AccountPage() {
       });
     }
 
+    if (courseApplicationsResult.error && courseApplicationsResult.status !== 401) {
+      setStatus({
+        type: "error",
+        message: "Nie udało się pobrać zgłoszeń na kursy. Sprawdź konfigurację Supabase.",
+      });
+    }
+
     if (profileResult.data) {
       setProfile({
         full_name: profileResult.data.full_name || "",
@@ -84,6 +97,7 @@ function AccountPage() {
     }
 
     setOrders(ordersResult.data || []);
+    setCourseApplications(courseApplicationsResult.data || []);
   }
 
   function updateField(name, value) {
@@ -277,10 +291,61 @@ function AccountPage() {
             )}
           </div>
         </div>
+
+        <div className="mt-8 rounded-[1.5rem] border border-neutral-950/10 bg-milk p-6 shadow-soft md:p-8">
+          <div className="mb-7 flex items-center gap-4">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-neutral-950/10 bg-porcelain text-rosewood">
+              <BookOpen size={22} aria-hidden="true" />
+            </span>
+            <div>
+              <p className="eyebrow mb-2">Kursy</p>
+              <h2 className="font-display text-4xl leading-tight">Moje kursy</h2>
+            </div>
+          </div>
+
+          {courseApplications.length === 0 ? (
+            <p className="rounded-2xl border border-neutral-950/10 bg-porcelain p-5 text-stone">
+              Nie masz jeszcze zgłoszeń na kursy.
+            </p>
+          ) : (
+            <div className="grid gap-5 lg:grid-cols-2">
+              {courseApplications.map((application) => {
+                const course = application.courses || {};
+
+                return (
+                  <article
+                    className="rounded-2xl border border-neutral-950/10 bg-porcelain p-5"
+                    key={application.id}
+                  >
+                    <p className="text-xs uppercase tracking-[0.18em] text-stone">
+                      {formatDate(application.created_at)}
+                    </p>
+                    <h3 className="mt-3 font-display text-3xl leading-tight text-neutral-950">
+                      {course.title || "Kurs szycia"}
+                    </h3>
+                    <div className="mt-5 grid gap-2 text-sm leading-6 text-stone">
+                      <p>
+                        <span className="font-semibold text-neutral-950">Start:</span>{" "}
+                        {formatDate(course.start_date)}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-neutral-950">Cena:</span>{" "}
+                        {formatCartPrice(course.price)}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-neutral-950">Status:</span>{" "}
+                        {getCourseApplicationStatusLabel(application.status)}
+                      </p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
 }
 
 export default AccountPage;
-

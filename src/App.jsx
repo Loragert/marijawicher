@@ -10,6 +10,8 @@ import { CartProvider } from "./features/cart/CartContext.jsx";
 import AccountPage from "./pages/AccountPage.jsx";
 import AdminCategoriesPage from "./pages/AdminCategoriesPage.jsx";
 import AdminCollectionsPage from "./pages/AdminCollectionsPage.jsx";
+import AdminCourseApplicationsPage from "./pages/AdminCourseApplicationsPage.jsx";
+import AdminCoursesPage from "./pages/AdminCoursesPage.jsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.jsx";
 import AdminLoginPage from "./pages/AdminLoginPage.jsx";
 import AdminMessagesPage from "./pages/AdminMessagesPage.jsx";
@@ -40,6 +42,8 @@ const pageRoutes = {
   "admin/products": AdminProductsPage,
   "admin/categories": AdminCategoriesPage,
   "admin/collections": AdminCollectionsPage,
+  "admin/courses": AdminCoursesPage,
+  "admin/course-applications": AdminCourseApplicationsPage,
   "admin/messages": AdminMessagesPage,
   "admin/orders": AdminOrdersPage,
   account: AccountPage,

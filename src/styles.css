@@ -513,6 +513,16 @@ body {
     @apply rounded-2xl border border-neutral-950/10 bg-milk px-5 py-4 text-base normal-case tracking-normal text-neutral-950 outline-none transition duration-300 focus:border-rosewood/50 focus:bg-porcelain focus:ring-2 focus:ring-rosewood/10;
   }
 
+  .admin-field {
+    @apply flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone;
+  }
+
+  .admin-field input,
+  .admin-field textarea,
+  .admin-field select {
+    @apply rounded-2xl border border-neutral-950/10 bg-porcelain px-5 py-4 text-base normal-case tracking-normal text-neutral-950 outline-none transition duration-300 focus:border-rosewood/50 focus:ring-2 focus:ring-rosewood/10;
+  }
+
   .contact-faq-list {
     @apply space-y-4;
   }
